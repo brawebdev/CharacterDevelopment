@@ -1,7 +1,4 @@
-﻿using System;
-using System.Globalization;
-using System.Linq;
-using System.Security.Claims;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -13,6 +10,10 @@ using CharacterDevelopment.Data;
 
 namespace CharacterDevelopment.WebMVC.Controllers
 {
+#if !DEBUG
+    [RequireHttps]
+#endif
+
     [Authorize]
     public class AccountController : Controller
     {
@@ -424,7 +425,7 @@ namespace CharacterDevelopment.WebMVC.Controllers
             base.Dispose(disposing);
         }
 
-        #region Helpers
+#region Helpers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
 
@@ -481,6 +482,6 @@ namespace CharacterDevelopment.WebMVC.Controllers
                 context.HttpContext.GetOwinContext().Authentication.Challenge(properties, LoginProvider);
             }
         }
-        #endregion
+#endregion
     }
 }
