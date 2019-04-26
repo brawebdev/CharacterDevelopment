@@ -45,6 +45,8 @@ namespace CharacterDevelopment.Data
 
         public DbSet<Project> Projects { get; set; }
 
+        public DbSet<Skill> Skills { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder

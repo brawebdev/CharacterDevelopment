@@ -11,5 +11,6 @@
         public string Url { get; set; }
 
         public byte[] Image { get; set; }
+        public int SkillId { get; set; }
     }
 }

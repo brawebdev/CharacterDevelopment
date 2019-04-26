@@ -5,6 +5,9 @@ namespace CharacterDevelopment.Models.Skill
     public class SkillCreate
     {
         [Required]
+        public int SkillId { get; set; }
+
+        [Required]
         public string Title { get; set; }
 
         [Required]
