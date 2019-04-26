@@ -5,6 +5,9 @@ namespace CharacterDevelopment.Models.Project
     public class ProjectCreate
     {
         [Required]
+        public int ProjectId { get; set; }
+
+        [Required]
         public string Title { get; set; }
 
         [Required]
