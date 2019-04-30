@@ -64,6 +64,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CharacterDevelopment.Contracts\CharacterDevelopment.Contracts.csproj">
+      <Project>{F228CDE7-6AE4-423F-B8B2-6EE66987DCF7}</Project>
+      <Name>CharacterDevelopment.Contracts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CharacterDevelopment.Data\CharacterDevelopment.Data.csproj">
       <Project>{2397b2cf-dc1a-47f9-834b-c94cb4db55a9}</Project>
       <Name>CharacterDevelopment.Data</Name>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web.Http;
+using CharacterDevelopment.Contracts;
 using CharacterDevelopment.Models.Post;
 using CharacterDevelopment.Services;
 using Microsoft.AspNet.Identity;
@@ -9,17 +10,25 @@ namespace CharacterDevelopment.API.Controllers
     [Authorize]
     public class PostController : ApiController
     {
+        private IPostService service;
+
+        public PostController(IPostService mockService)
+        {
+            service = mockService;
+        }
+
         public IHttpActionResult GetAll()
         {
-            PostService postService = CreatePostService();
-            var posts = postService.GetPosts();
+            CreatePostService();
+
+            var posts = service.GetPosts();
             return Ok(posts);
         }
 
         public IHttpActionResult Get(int id)
         {
-            PostService postService = CreatePostService();
-            var post = postService.GetPostById(id);
+            CreatePostService();
+            var post = service.GetPostById(id);
             return Ok(post);
         }
 
@@ -28,7 +37,7 @@ namespace CharacterDevelopment.API.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var service = CreatePostService();
+            CreatePostService();
 
             if (!service.CreatePost(post))
                 return InternalServerError();
@@ -41,7 +50,7 @@ namespace CharacterDevelopment.API.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var service = CreatePostService();
+            CreatePostService();
 
             if (!service.UpdatePost(post))
                 return InternalServerError();
@@ -51,7 +60,7 @@ namespace CharacterDevelopment.API.Controllers
 
         public IHttpActionResult Delete(int id)
         {
-            var service = CreatePostService();
+            CreatePostService();
 
             if (!service.DeletePost(id))
                 return InternalServerError();
@@ -59,11 +68,13 @@ namespace CharacterDevelopment.API.Controllers
             return Ok();
         }
 
-        private PostService CreatePostService()
+        private void CreatePostService()
         {
-            var userId = Guid.Parse(User.Identity.GetUserId());
-            var postService = new PostService(userId);
-            return postService;
+            if (service == null)
+            {
+                var userId = Guid.Parse(User.Identity.GetUserId());
+                service = new PostService(userId);
+            }
         }
     }
 }

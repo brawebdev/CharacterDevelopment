@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web.Http;
+using CharacterDevelopment.Contracts;
 using CharacterDevelopment.Models.Project;
 using CharacterDevelopment.Services;
 using Microsoft.AspNet.Identity;
@@ -9,17 +10,24 @@ namespace CharacterDevelopment.API.Controllers
     [Authorize]
     public class ProjectController : ApiController
     {
+        private IProjectService service;
+
+        public ProjectController(IProjectService mockService)
+        {
+            service = mockService;
+        }
+
         public IHttpActionResult GetAll()
         {
-            ProjectService projectService = CreateProjectService();
-            var project = projectService.GetProjects();
+            CreateProjectService();
+            var project = service.GetProjects();
             return Ok(project);
         }
 
         public IHttpActionResult Get(int id)
         {
-            ProjectService projectService = CreateProjectService();
-            var project = projectService.GetProjectById(id);
+            CreateProjectService();
+            var project = service.GetProjectById(id);
             return Ok(project);
         }
 
@@ -28,7 +36,7 @@ namespace CharacterDevelopment.API.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var service = CreateProjectService();
+            CreateProjectService();
 
             if (!service.CreateProject(project))
                 return InternalServerError();
@@ -41,7 +49,7 @@ namespace CharacterDevelopment.API.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var service = CreateProjectService();
+            CreateProjectService();
 
             if (!service.UpdateProject(project))
                 return InternalServerError();
@@ -51,7 +59,7 @@ namespace CharacterDevelopment.API.Controllers
 
         public IHttpActionResult Delete(int id)
         {
-            var service = CreateProjectService();
+            CreateProjectService();
 
             if (!service.DeleteProject(id))
                 return InternalServerError();
@@ -59,11 +67,13 @@ namespace CharacterDevelopment.API.Controllers
             return Ok();
         }
 
-        private ProjectService CreateProjectService()
+        private void CreateProjectService()
         {
-            var userId = Guid.Parse(User.Identity.GetUserId());
-            var projectService = new ProjectService(userId);
-            return projectService;
+            if (service == null)
+            {
+                var userId = Guid.Parse(User.Identity.GetUserId());
+                service = new ProjectService(userId);
+            }
         }
     }
 }

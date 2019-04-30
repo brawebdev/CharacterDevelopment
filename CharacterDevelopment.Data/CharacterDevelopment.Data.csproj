@@ -54,6 +54,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationDbContext.cs" />
+    <Compile Include="IApplicationDbContext.cs" />
     <Compile Include="IdentityModels.cs" />
     <Compile Include="Migrations\201903251301339_InitialCreate.cs" />
     <Compile Include="Migrations\201903251301339_InitialCreate.Designer.cs">

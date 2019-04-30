@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using CharacterDevelopment.Contracts;
 using CharacterDevelopment.Data;
 using CharacterDevelopment.Models.Skill;
 
 namespace CharacterDevelopment.Services
 {
-    public class SkillService
+    public class SkillService : ISkillService
     {
-        private readonly Guid _userId;
+        private readonly Guid userId;
 
-        public SkillService(Guid userId)
+        public SkillService(Guid id)
         {
-            _userId = userId;
+            userId = id;
         }
 
         public bool CreateSkill(SkillCreate model)
@@ -20,7 +21,7 @@ namespace CharacterDevelopment.Services
             var entity =
                 new Skill
                 {
-                    OwnerId = _userId,
+                    OwnerId = userId,
                     SkillId = model.SkillId,
                     Title = model.Title,
                     Description = model.Description,
@@ -71,7 +72,7 @@ namespace CharacterDevelopment.Services
         {
             using (var ctx = new ApplicationDbContext())
             {
-                var entity = ctx.Skills.Single(e => e.SkillId == model.SkillId && e.OwnerId == _userId);
+                var entity = ctx.Skills.Single(e => e.SkillId == model.SkillId && e.OwnerId == userId);
 
                 entity.Title = model.Title;
                 entity.Description = model.Description;
@@ -86,7 +87,7 @@ namespace CharacterDevelopment.Services
         {
             using (var ctx = new ApplicationDbContext())
             {
-                var entity = ctx.Skills.Single(e => e.SkillId == skillId && e.OwnerId == _userId);
+                var entity = ctx.Skills.Single(e => e.SkillId == skillId && e.OwnerId == userId);
 
                 ctx.Skills.Remove(entity);
 

@@ -54,11 +54,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IPostService.cs" />
+    <Compile Include="IProjectService.cs" />
+    <Compile Include="ISkillService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CharacterDevelopment.Data\CharacterDevelopment.Data.csproj">
+      <Project>{2397B2CF-DC1A-47F9-834B-C94CB4DB55A9}</Project>
+      <Name>CharacterDevelopment.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CharacterDevelopment.Models\CharacterDevelopment.Models.csproj">
+      <Project>{BF8C6DE8-33C3-42E0-9793-2A07A011A635}</Project>
+      <Name>CharacterDevelopment.Models</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

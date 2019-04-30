@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using CharacterDevelopment.Contracts;
 using CharacterDevelopment.Data;
 using CharacterDevelopment.Models.Project;
 
 namespace CharacterDevelopment.Services
 {
-    public class ProjectService
+    public class ProjectService : IProjectService
     {
-        private readonly Guid _userId;
+        private readonly Guid userId;
 
-        public ProjectService(Guid userId)
+        public ProjectService(Guid id)
         {
-            _userId = userId;
+            userId = id;
         }
 
         public bool CreateProject(ProjectCreate model)
@@ -20,7 +21,7 @@ namespace CharacterDevelopment.Services
             var entity =
                 new Project
                 {
-                    OwnerId = _userId,
+                    OwnerId = userId,
                     Title = model.Title,
                     Description = model.Description,
                     Url = model.Url,
@@ -71,7 +72,7 @@ namespace CharacterDevelopment.Services
         {
             using (var ctx = new ApplicationDbContext())
             {
-                var entity = ctx.Projects.Single(e => e.ProjectId == model.ProjectId && e.OwnerId == _userId);
+                var entity = ctx.Projects.Single(e => e.ProjectId == model.ProjectId && e.OwnerId == userId);
 
                 entity.Title = model.Title;
                 entity.Description = model.Description;
@@ -86,7 +87,7 @@ namespace CharacterDevelopment.Services
         {
             using (var ctx = new ApplicationDbContext())
             {
-                var entity = ctx.Projects.Single(e => e.ProjectId == projectId && e.OwnerId == _userId);
+                var entity = ctx.Projects.Single(e => e.ProjectId == projectId && e.OwnerId == userId);
 
                 ctx.Projects.Remove(entity);
 

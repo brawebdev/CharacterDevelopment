@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web.Http;
+using CharacterDevelopment.Contracts;
 using CharacterDevelopment.Models.Skill;
 using CharacterDevelopment.Services;
 using Microsoft.AspNet.Identity;
@@ -9,17 +10,26 @@ namespace CharacterDevelopment.API.Controllers
     [Authorize]
     public class SkillController : ApiController
     {
+        private ISkillService service;
+
+        public SkillController(ISkillService mockService)
+        {
+            service = mockService;
+        }
+
         public IHttpActionResult GetAll()
         {
-            SkillService skillService = CreateSkillService();
-            var skill = skillService.GetSkills();
+            CreateSkillService();
+            var skill = service.GetSkills();
+
             return Ok(skill);
         }
 
         public IHttpActionResult Get(int id)
         {
-            SkillService skillService = CreateSkillService();
-            var skill = skillService.GetSkillById(id);
+            CreateSkillService();
+            var skill = service.GetSkillById(id);
+
             return Ok(skill);
         }
 
@@ -28,7 +38,7 @@ namespace CharacterDevelopment.API.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var service = CreateSkillService();
+            CreateSkillService();
 
             if (!service.CreateSkill(skill))
                 return InternalServerError();
@@ -41,7 +51,7 @@ namespace CharacterDevelopment.API.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var service = CreateSkillService();
+            CreateSkillService();
 
             if (!service.UpdateSkill(skill))
                 return InternalServerError();
@@ -51,19 +61,21 @@ namespace CharacterDevelopment.API.Controllers
 
         public IHttpActionResult Delete(int id)
         {
-            SkillService skillService = CreateSkillService();
+            CreateSkillService();
 
-            if (!skillService.DeleteSkill(id))
+            if (!service.DeleteSkill(id))
                 return InternalServerError();
 
             return Ok();
         }
 
-        public SkillService CreateSkillService()
+        public void CreateSkillService()
         {
-            var userId = Guid.Parse(User.Identity.GetUserId());
-            var skillService = new SkillService(userId);
-            return skillService;
+            if (service == null)
+            {
+                var userId = Guid.Parse(User.Identity.GetUserId());
+                service = new SkillService(userId);
+            }
         }
     }
 }
